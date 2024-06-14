@@ -8,7 +8,7 @@ export default function Home() {
       <h1>
         Home
       </h1>
-      <AuthButton />
+      <AuthButton action='log-in' />
     </main>
   );
 }
