@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-
-import AuthContext from './context/Auth.context';
-
+import AuthProvider from './context/Auth.context';
 import "./globals.css";
-import Nav from "./components/Nav/Nav";
+import Wrapper from "./components/Layouts/Wrapper/Wrapper";
 
 export const metadata: Metadata = {
   title: "Photo weekly challenge",
@@ -13,6 +11,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+
   return (
     <html lang="en" className="dark-theme">
       <head>
@@ -23,10 +22,11 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <AuthContext>
-          <Nav />
-          {children}
-        </AuthContext>
+        <AuthProvider>
+          <Wrapper>
+            {children}
+          </Wrapper>
+        </AuthProvider>
       </body>
     </html>
   );

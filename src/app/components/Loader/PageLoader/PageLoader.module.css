@@ -1,0 +1,14 @@
+.skeleton_dashboard {
+    width: calc(100vw - 24rem);
+}
+
+@media screen and (max-width: 1000px) {
+    .skeleton {
+        flex-direction: column;
+    }
+
+    .skeleton_dashboard,
+    .skeleton_aside {
+        width: 100vw;
+    }
+}
