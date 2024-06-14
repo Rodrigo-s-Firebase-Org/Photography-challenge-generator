@@ -2,7 +2,7 @@ export default function Home() {
   return (
     <main>
       <h1>
-        xd
+        Home
       </h1>
     </main>
   );

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
+import Nav from "./components/Nav/Nav";
 
 export const metadata: Metadata = {
   title: "Photo weekly challenge",
@@ -20,6 +21,7 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <Nav />
         {children}
       </body>
     </html>
