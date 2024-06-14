@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import AuthContext from './context/Auth.context';
+
 import "./globals.css";
 import Nav from "./components/Nav/Nav";
 
@@ -21,8 +23,10 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <Nav />
-        {children}
+        <AuthContext>
+          <Nav />
+          {children}
+        </AuthContext>
       </body>
     </html>
   );
