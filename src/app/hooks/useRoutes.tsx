@@ -16,7 +16,7 @@ export const useRoutes: IUseRoutes = () => {
         if (needsAuth && client === null) {
             redirect('/');
         }
-        if (!needsAuth && client !== null) {
+        if (needsAuth === false && client !== null) {
             redirect('/profile');
         }
     };
