@@ -10,24 +10,6 @@
 .reached_limit {
     display: none
 }
-.btn_upload_more {
-    @apply bg-slate-500;
-    @apply text-white;
-    @apply py-2;
-    @apply px-4;
-    @apply rounded-md;
-    @apply transition-colors;
-    @apply hover:bg-slate-400;
-}
-.btn_submit {
-    @apply bg-indigo-500;
-    @apply text-white;
-    @apply py-2;
-    @apply px-4;
-    @apply rounded-md;
-    @apply transition-colors;
-    @apply hover:bg-indigo-400;
-}
 .container_images {
     width: 640px;
     justify-content: left;
@@ -37,4 +19,7 @@
 }
 .upload_image {
     width: 400px;
+}
+.wrapper_title {
+    width: 640px;
 }
