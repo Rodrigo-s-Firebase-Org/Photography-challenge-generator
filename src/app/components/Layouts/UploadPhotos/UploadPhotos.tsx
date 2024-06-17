@@ -71,16 +71,24 @@ export default function UploadPhotos() {
             <h1 className='text-2xl font-bold mb-10'>
                 Drag and Drop
             </h1>
-
-            <div className={`${styles.container_for_upload} ${canUploadMore() && styles.container_for_upload_resizing}`}  {...getRootProps()}>
-                <input {...getInputProps()} />
-                {images.length === 0 && (
-                    <img className={styles.upload_image} src='./icons/upload.svg' alt="Upload" />
-                )}
-                {canUploadMore() && (
-                    <button className={styles.btn_upload_more}>
-                        Upload more
-                    </button>
+            <div className='flex gap-5 mb-10'>
+                <div className={`${styles.container_for_upload} ${images.length === IMAGE_LIMIT && styles.reached_limit} ${canUploadMore() && styles.container_for_upload_resizing}`}  {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    {images.length === 0 && (
+                        <img className={styles.upload_image} src='./icons/upload.svg' alt="Upload" />
+                    )}
+                    {canUploadMore() && (
+                        <button className={styles.btn_upload_more}>
+                            Upload more
+                        </button>
+                    )}
+                </div>
+                {images.length > 0 && (
+                    <div>
+                        <button className={styles.btn_submit}>
+                            Submit photos
+                        </button>
+                    </div>
                 )}
             </div>
             <div className={styles.container_images}>
