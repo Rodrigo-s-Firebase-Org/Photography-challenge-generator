@@ -1,13 +1,13 @@
-import { randomUUID } from "node:crypto";
+import { DocumentData, QuerySnapshot, QueryDocumentSnapshot } from 'firebase/firestore';
 
-export function getDateString() {
-  return new Date().toLocaleString("en-US", {
-    dateStyle: "medium",
-    timeStyle: "long",
-    timeZone: "UTC",
-  });
-}
+export function SnapshotFormater<T>(snapshot: QueryDocumentSnapshot<DocumentData, DocumentData>): T {  
+  const obj = {
+    ...snapshot.data(),
+    id: snapshot.id,
+  } as T;
+  return obj;
+};
 
-export function getRandomUUID() {
-  return randomUUID();
+export function CollectionFormater<T>(collectionSnapshot: QuerySnapshot<DocumentData, DocumentData>): T[] {
+  return collectionSnapshot.docs.map(SnapshotFormater<T>);
 }

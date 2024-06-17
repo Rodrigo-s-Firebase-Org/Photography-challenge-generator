@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-
+import AuthProvider from './context/Auth.context';
 import "./globals.css";
-import { Header } from "./components";
+import Wrapper from "./components/Layouts/Wrapper/Wrapper";
 
 export const metadata: Metadata = {
-  title: "Next.js on Firebase App Hosting",
-  description: "",
+  title: "Photo weekly challenge",
+  description: "Photo weekly challenge",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+
   return (
     <html lang="en" className="dark-theme">
       <head>
@@ -21,10 +22,11 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <div className="dots" />
-        <Header />
-        {children}
-        <div className="bottom-gradient" />
+        <AuthProvider>
+          <Wrapper>
+            {children}
+          </Wrapper>
+        </AuthProvider>
       </body>
     </html>
   );
