@@ -29,7 +29,7 @@ export default function AuthButton({
     return (
         <button
             onClick={actionDiscovery}
-            className={`${styles.btn}`}
+            className={`${styles.btn} bg-indigo-500 text-white py-2 px-4 rounded-md transition-colors hover:bg-indigo-400`}
         >
             {TextMapper.get(action)}
         </button>
