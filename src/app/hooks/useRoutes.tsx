@@ -1,15 +1,15 @@
-import { useEffect, useContext } from 'react';
-import { AuthContext } from '../context/Auth.context';
 import { usePathname, redirect } from 'next/navigation';
-import {routes} from '../routes/index.routes';
+import { routes } from '../routes/index.routes';
+import { useContext, useEffect } from 'react';
+import { AuthContext } from '../context/Auth.context';
 
 interface IUseRoutes {
     (): void
 }
 
 export const useRoutes: IUseRoutes = () => {
+    const pathname = usePathname();
     const { client, isLoadingAuth } = useContext(AuthContext);
-    const pathname = usePathname()
 
     const validateAuthInRoute = () => {
         const needsAuth = routes[pathname];

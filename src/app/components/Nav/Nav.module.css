@@ -1,0 +1,19 @@
+.nav {
+    height: 80px;
+    width: 100vw;
+    position: sticky;
+    top: 0;
+    left: 0;
+    display: flex;
+    padding: 0 30px;
+    align-items: center;
+    justify-content: space-between;
+}
+.nav_title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.tools {
+    display: flex;
+    gap: 50px;
+}
