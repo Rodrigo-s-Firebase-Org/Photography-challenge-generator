@@ -1,0 +1,29 @@
+.container_for_upload {
+    width: 640px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+.container_for_upload_resizing {
+    width: fit-content;
+    @apply mb-10;
+}
+.btn_upload_more {
+    @apply bg-indigo-500;
+    @apply text-white;
+    @apply py-2;
+    @apply px-4;
+    @apply rounded-md;
+    @apply transition-colors;
+    @apply hover:bg-indigo-400;
+}
+.container_images {
+    width: 640px;
+    justify-content: left;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.upload_image {
+    width: 400px;
+}

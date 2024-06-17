@@ -1,4 +1,3 @@
-import styles from './Auth.module.css';
 import { auth, provider } from '../../../config/firebase.config';
 
 type TAction = 'log-in' | 'log-out';
@@ -29,7 +28,7 @@ export default function AuthButton({
     return (
         <button
             onClick={actionDiscovery}
-            className={`${styles.btn} bg-indigo-500 text-white py-2 px-4 rounded-md transition-colors hover:bg-indigo-400`}
+            className='bg-indigo-500 text-white py-2 px-4 rounded-md transition-colors hover:bg-indigo-400'
         >
             {TextMapper.get(action)}
         </button>

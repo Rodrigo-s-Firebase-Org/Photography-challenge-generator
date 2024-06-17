@@ -1,7 +1,8 @@
-import { useCallback, useState } from 'react';
+import { Fragment, useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { IImage } from './UploadPhotos.types';
 import styles from './UploadPhotos.module.css';
+import Card from './Card/Card';
 
 const IMAGE_LIMIT = 9;
 
@@ -61,19 +62,44 @@ export default function UploadPhotos() {
 
     const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
+    const canUploadMore = () : boolean => {
+        return images.length < IMAGE_LIMIT && images.length !== 0;
+    }
+
     return (
-        <>
-            <h1>
+        <div className='flex items-center flex-col pt-14'>
+            <h1 className='text-2xl font-bold mb-10'>
                 Drag and Drop
             </h1>
 
-            <div className={`${styles.block_picture} ${styles.block_picture_upload}`}  {...getRootProps()}>
+            <div className={`${styles.container_for_upload} ${canUploadMore() && styles.container_for_upload_resizing}`}  {...getRootProps()}>
                 <input {...getInputProps()} />
-                +
-                <div>
-                    dropea
-                </div>
+                {images.length === 0 && (
+                    <img className={styles.upload_image} src='./icons/upload.svg' alt="Upload" />
+                )}
+                {canUploadMore() && (
+                    <button className={styles.btn_upload_more}>
+                        Upload more
+                    </button>
+                )}
             </div>
-        </>
+            <div className={styles.container_images}>
+                {images.map((element: IImage, index: number) => {
+                    return (
+                        <Fragment key={index}>
+                            <Card remove={() => {
+                                setImages(prev => {
+                                    const aux = [
+                                        ...prev.slice(0, index),
+                                        ...prev.slice(index + 1, prev.length),
+                                    ];
+                                    return aux;
+                                })
+                            }} src={element.src} />
+                        </Fragment>
+                    )
+                })}
+            </div>
+        </div>
     )
 }

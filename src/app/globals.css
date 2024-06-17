@@ -34,11 +34,10 @@ button {
 }
 .page_css {
   @apply w-screen;
-  @apply h-screen;
+  @apply min-h-screen;
   @apply bg-slate-50;
   @apply pt-20;
   @apply flex;
-  @apply justify-center;
-  @apply items-center;
   @apply flex-col;
+  @apply pb-10;
 }
