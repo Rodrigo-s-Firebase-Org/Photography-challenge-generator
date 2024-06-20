@@ -56,3 +56,6 @@
     height: 100%;
     object-fit: cover;
 }
+.loader_layout {
+    width: 640px;
+}
