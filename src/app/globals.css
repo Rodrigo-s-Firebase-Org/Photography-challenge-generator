@@ -32,3 +32,12 @@ button {
   outline: none;
   border-style: none;
 }
+.page_css {
+  @apply w-screen;
+  @apply min-h-screen;
+  @apply bg-slate-50;
+  @apply pt-20;
+  @apply flex;
+  @apply flex-col;
+  @apply pb-10;
+}

@@ -1,18 +1,11 @@
 "use client";
 
-import AuthButton from './components/Button/Auth/Auth';
-import {AuthContext} from './context/Auth.context';
-import {useContext} from 'react';
+import HomeLayout from './components/Layouts/Home/Home';
 
 export default function Home() {
-  const {client} = useContext(AuthContext);
-
   return (
-    <main>
-      <h1>
-        Welcome {client?.name}
-      </h1>
-      <AuthButton action={client === null ? 'log-in' : 'log-out'} />
+    <main className='page_css justify-center items-center'>
+      <HomeLayout />
     </main>
   );
 }

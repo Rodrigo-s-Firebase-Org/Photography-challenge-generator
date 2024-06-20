@@ -1,0 +1,54 @@
+.card {
+    width: 200px;
+    background-color: #FFF;
+    height: 200px;
+    @apply rounded-md;
+    border-width: 1px;
+    border-style: dashed;
+    @apply border-slate-400;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @apply hover:bg-slate-100;
+    @apply transition-colors;
+    position: relative;
+    z-index: 1;
+}
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.remove_btn {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.75);
+    width: 30px;
+    height: 30px;
+    border-radius: 0 0 0 99999px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-right: 10px;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 500ms;
+}
+@media (hover:hover) and (pointer:fine) {
+    .card:hover .remove_btn {
+        visibility: visible;
+        opacity: 1;
+    }
+    .remove_btn:hover {
+        width: 200%;
+        height: 200%;
+        font-size: 1.2rem;
+        padding-right: 90px;
+        padding-top: 85px;
+        background-color: rgba(255, 255, 255, 1);
+    }
+}
