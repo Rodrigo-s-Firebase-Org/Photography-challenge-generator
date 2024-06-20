@@ -60,15 +60,19 @@ export default class Photo implements IPhoto {
         return document;
     }
 
-    static async getAll(): Promise<IPhoto[]> {
-        let docs: IPhoto[] = [];
+    static async getByPrompt(promptId: string): Promise<IPhoto[]> {
         try {
-            docs = CollectionFormater<IPhoto>(await getDocs(COLLECTION_REF));
+            const promptDocRef = doc(db, "prompts", promptId);
+            const q = query(
+                collection(db, COLLECTION_NAME),
+                where('prompt', '==', promptDocRef)
+            );
+            const docSnaps: IPhoto[] = CollectionFormater<IPhoto>(await getDocs(q));
+            return docSnaps;
         } catch (err) {
             console.log(err);
             return [];
         }
-        return docs;
     }
 
     static async update(docId: string, key: keyof IPhoto, newValue: string): Promise<IPhoto | null> {
