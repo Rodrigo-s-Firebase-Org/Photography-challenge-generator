@@ -3,9 +3,10 @@ import { useDropzone } from 'react-dropzone';
 import { IImage } from './UploadPhotos.types';
 import styles from './UploadPhotos.module.css';
 import Card from './Card/Card';
-import {useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import ReturnAction from '../../Button/ReturnAction/ReturnAction';
 import SpinnerBtn from '../../Button/Spinner/Spinner';
+import Photo from '../../../firebase/models/photos.model';
 
 const IMAGE_LIMIT = 9;
 
@@ -67,8 +68,45 @@ export default function UploadPhotos() {
 
     const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
-    const canUploadMore = () : boolean => {
+    const canUploadMore = (): boolean => {
         return images.length < IMAGE_LIMIT && images.length !== 0;
+    }
+
+    const submitImages = (): void => {
+        const createPromiseToUpload = (imageToUpload: IImage) => {
+            return new Promise<boolean>((resolve) => {
+                const doFetch = async (): Promise<void> => {
+                    try {
+                        const newPhoto = new Photo({
+                            client: '',
+                            prompt: '',
+                            file: imageToUpload.file,
+                            url: ''
+                        });
+                        await newPhoto.save();
+                        resolve(true);
+                    } catch (error) {
+                        console.log(error);
+                        resolve(false);
+                    }
+                }
+                void doFetch();
+            });
+        };
+        const arr: Promise<boolean>[] = [];
+
+        for (let i = 0; i < images.length; i++) {
+            arr.push(createPromiseToUpload(images[i]));
+        };
+
+        const uploadAll = async (): Promise<void> => {
+            setIsLoading(true);
+            await Promise.all(arr);
+            console.log(images);
+            setIsLoading(false);
+            router.push('/photos');
+        }
+        void uploadAll();
     }
 
     return (
@@ -97,10 +135,7 @@ export default function UploadPhotos() {
                 </div>
                 {images.length > 0 && (
                     <div>
-                        <SpinnerBtn isLoading={isLoading} btnType='indigo' action={() => {
-                            // TODO: submit
-                            setIsLoading(prev => !prev);
-                        }}>
+                        <SpinnerBtn isLoading={isLoading} btnType='indigo' action={submitImages}>
                             Submit photos
                         </SpinnerBtn>
                     </div>
