@@ -12,6 +12,7 @@ const IMAGE_LIMIT = 9;
 export default function UploadPhotos() {
     const [images, setImages] = useState<IImage[]>([]);
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const addImage = (fileToUpload: File, index: number | null) => {
         try {
@@ -96,8 +97,9 @@ export default function UploadPhotos() {
                 </div>
                 {images.length > 0 && (
                     <div>
-                        <SpinnerBtn btnType='indigo' action={() => {
+                        <SpinnerBtn isLoading={isLoading} btnType='indigo' action={() => {
                             // TODO: submit
+                            setIsLoading(prev => !prev);
                         }}>
                             Submit photos
                         </SpinnerBtn>
