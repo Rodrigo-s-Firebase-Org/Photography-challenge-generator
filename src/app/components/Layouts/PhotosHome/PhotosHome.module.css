@@ -15,6 +15,7 @@
     height: calc(100vh - 80px);
     overflow-y: scroll;
 }
+
 .layout_posts {
     display: flex;
     position: relative;
@@ -23,6 +24,7 @@
     width: 640px;
     @apply pb-10;
 }
+
 .prompt {
     @apply flex-1;
     position: sticky;
@@ -30,10 +32,20 @@
     top: 50px;
     z-index: -1;
     width: 100%;
-    margin-top: 50px;
+    margin-top: 0px;
     @apply text-xl;
     @apply font-bold;
 }
+
+.prompt span {
+    @apply rounded;
+    @apply bg-indigo-100;
+    width: 130px;
+    padding: 20px;
+    display: inline-block;
+    text-align: center;
+}
+
 .container_cards {
     width: 500px;
     display: flex;
@@ -41,8 +53,9 @@
     gap: 50px;
     margin-left: auto;
     z-index: 2;
-    margin-top: calc(-24px - 50px);
+    margin-top: calc(-24px - 42.5px);
 }
+
 .card {
     width: 100%;
     height: 500px;
@@ -51,11 +64,38 @@
     @apply border-slate-400;
     @apply border;
 }
+
 .card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
+
 .loader_layout {
     width: 640px;
+}
+
+.curr_prompt {
+    font-size: 2rem;
+    @apply font-bold;
+    margin-top: 50px;
+    font-style: italic;
+    @apply text-indigo-600;
+}
+
+.profile_user {
+    height: 60px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    padding: 20px;
+    @apply bg-slate-200;
+    @apply border-b;
+    @apply border-b-slate-600;
+}
+
+.profilePhoto {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 100%;
 }

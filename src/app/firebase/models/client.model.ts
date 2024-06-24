@@ -12,7 +12,7 @@ import { db } from '../../config/firebase.config';
 import { CollectionFormater } from '../../utils';
 import { IClient } from '../../shared/client.interfaces';
 
-const COLLECTION_NAME = 'clients';
+export const COLLECTION_NAME = 'clients';
 const COLLECTION_REF = collection(db, COLLECTION_NAME);
 
 export default class Client implements IClient {
@@ -90,6 +90,24 @@ export default class Client implements IClient {
       return null;
     }
   }
+
+  static async getByDocId(id: string): Promise<IClient | null> {
+    try {
+      const q = query(
+        collection(db, COLLECTION_NAME),
+        where('__name__', '==', id)
+      );
+      const docSnaps: IClient[] = CollectionFormater<IClient>(await getDocs(q));
+      if (docSnaps.length > 0) { // It can only be 0 or 1
+        return docSnaps[0];
+      }
+      throw new Error('User not found');
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  }
+
 
   static async delete(docId: string): Promise<boolean> {
     try {

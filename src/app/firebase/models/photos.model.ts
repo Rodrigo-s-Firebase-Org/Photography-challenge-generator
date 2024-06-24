@@ -6,7 +6,8 @@ import {
     updateDoc,
     deleteDoc,
     query,
-    where
+    where,
+    DocumentReference
 } from 'firebase/firestore';
 import {
     getDownloadURL,
@@ -23,8 +24,8 @@ const COLLECTION_NAME = 'photos';
 const COLLECTION_REF = collection(db, COLLECTION_NAME);
 
 export default class Photo implements IPhoto {
-    client: string;
-    prompt: string;
+    client: DocumentReference | null;
+    prompt: DocumentReference | null;
     url: string;
     file: File | null;
 

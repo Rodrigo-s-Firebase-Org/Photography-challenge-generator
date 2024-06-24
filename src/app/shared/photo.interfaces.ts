@@ -1,6 +1,8 @@
+import { DocumentReference } from "firebase/firestore";
+
 export interface IPhoto {
-    client: string;
-    prompt: string;
+    client: DocumentReference | null;
+    prompt: DocumentReference | null;
     url: string;
     file: File | null;
 }
