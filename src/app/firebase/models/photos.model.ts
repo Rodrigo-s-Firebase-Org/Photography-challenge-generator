@@ -7,7 +7,9 @@ import {
     deleteDoc,
     query,
     where,
-    DocumentReference
+    DocumentReference,
+    Timestamp,
+    orderBy
 } from 'firebase/firestore';
 import {
     getDownloadURL,
@@ -29,6 +31,7 @@ export default class Photo implements IPhoto {
     url: string;
     file: File | null;
     doc_id: string;
+    createdAt: Date;
 
     constructor(photo: IPhoto | null) {
         if (photo === null) throw new Error('No photo was provided');
@@ -39,6 +42,7 @@ export default class Photo implements IPhoto {
         this.file = photo.file;
         this.url = '';
         this.doc_id = '';
+        this.createdAt = new Date();
     }
 
     async save(): Promise<IPhoto | null> {
@@ -53,6 +57,7 @@ export default class Photo implements IPhoto {
                 client: this.client,
                 prompt: this.prompt,
                 url: this.url,
+                createdAt: Timestamp.now().toDate().getTime()
             });
             document = await Photo.getById(addedDocRef.id);
         } catch (err) {

@@ -6,4 +6,5 @@ export interface IPhoto {
     url: string;
     file: File | null;
     doc_id: string;
+    createdAt: Date;
 }

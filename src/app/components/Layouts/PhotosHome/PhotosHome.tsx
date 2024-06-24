@@ -74,6 +74,12 @@ export default function PhotosHome() {
         void doFetch();
     };
 
+    const sortPosts = (a: IPost, b: IPost): number => {
+        if (a.photo.createdAt > b.photo.createdAt) return -1;
+        if (a.photo.createdAt < b.photo.createdAt) return 1;
+        return 0;
+    }
+
     useEffect(getAllPhotos, []);
 
     return (
@@ -107,7 +113,7 @@ export default function PhotosHome() {
                                     )}
                                 </div>
                             )}
-                            {currPostsInMap.map((element: IPost, jIndex: number) => {
+                            {currPostsInMap.sort(sortPosts).map((element: IPost, jIndex: number) => {
                                 const currPhoto: IPhoto = element.photo;
                                 const currClient: IClient | null = element.client;
 
