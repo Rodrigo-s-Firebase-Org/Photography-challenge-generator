@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 import UploadButton from '../../Button/Upload/Upload';
+import {AuthContext} from '../../../context/Auth.context';
 import styles from './PhotosHome.module.css';
 import { IPhoto } from '../../../shared/photo.interfaces';
 import Photo from '../../../firebase/models/photos.model';
 import Prompt from '../../../firebase/models/prompt.model';
 import { IPrompt } from '../../../shared/prompt.interfaces';
 import Loader from './Loader';
-import { getCurrDay } from '../../../utils';
 import { IClient } from '../../../shared/client.interfaces';
 import Client from '../../../firebase/models/client.model';
 
@@ -21,8 +21,10 @@ interface IPosts {
 }
 
 export default function PhotosHome() {
+    const {
+        currPrompt
+    } = useContext(AuthContext);
     const [posts, setPosts] = useState<IPosts>({});
-    const [currPrompt, setCurrPrompt] = useState<IPrompt | null>(null);
     const isFetching = useRef(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -32,12 +34,7 @@ export default function PhotosHome() {
 
         const doFetch = async (): Promise<void> => {
             setIsLoading(true);
-            const possibleCurrPrompt = await Prompt.getByDay(getCurrDay());
             const allPrompts = await Prompt.getAll();
-
-            if (possibleCurrPrompt !== null) {
-                setCurrPrompt(possibleCurrPrompt);
-            }
 
             for (let i = 0; i < allPrompts.length; i++) {
                 const allPhotosFromPrompt = await Photo.getByPrompt(allPrompts[i].id);

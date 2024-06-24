@@ -6,6 +6,7 @@ import PageLoader from "../../../components/Loader/PageLoader/PageLoader";
 import Nav from "../../../components/Nav/Nav";
 import { AnimatePresence } from "framer-motion";
 import { useAuth } from '../../../hooks/useAuth';
+import { usePrompts } from '../../../hooks/usePrompts';
 import { useRoutes } from '../../../hooks/useRoutes';
 
 interface Props {
@@ -18,6 +19,7 @@ export default function Wrapper({
     const { isLoadingAuth } = useContext(AuthContext);
     useAuth();
     useRoutes();
+    usePrompts();
 
     return (
         <AnimatePresence mode="wait">
