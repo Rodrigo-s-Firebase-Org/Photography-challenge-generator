@@ -9,7 +9,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 40px;
     align-items: center;
 
     height: calc(100vh - 80px);
@@ -22,7 +22,7 @@
     z-index: 0;
     flex-direction: column;
     width: 640px;
-    @apply pb-10;
+    @apply pb-20;
 }
 
 .prompt {

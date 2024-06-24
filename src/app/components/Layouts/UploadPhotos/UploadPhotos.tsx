@@ -14,11 +14,12 @@ import {
 import { db } from '../../../config/firebase.config';
 import { COLLECTION_NAME as COLLECTION_CLIENT_NAME } from '../../../firebase/models/client.model';
 import { COLLECTION_NAME as COLLECTION_PROMPT_NAME } from '../../../firebase/models/prompt.model';
+import { IPhoto } from '../../../shared/photo.interfaces';
 
 const IMAGE_LIMIT = 9;
 
 export default function UploadPhotos() {
-    const {client} = useContext(AuthContext);
+    const {client, currPrompt} = useContext(AuthContext);
     const [images, setImages] = useState<IImage[]>([]);
     const router = useRouter();
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -82,20 +83,20 @@ export default function UploadPhotos() {
 
     const submitImages = (): void => {
         if (client === null) return;
+        if (currPrompt === null) return;
 
         const createPromiseToUpload = (imageToUpload: IImage) => {
             return new Promise<boolean>((resolve) => {
                 const doFetch = async (): Promise<void> => {
                     try {
-                        const clientRef = doc(db, COLLECTION_CLIENT_NAME, client.id);
-                        const promptRef = doc(db, COLLECTION_PROMPT_NAME, client.id);
-
+                        const clientRef = doc(db, COLLECTION_CLIENT_NAME, client.doc_id);
+                        const promptRef = doc(db, COLLECTION_PROMPT_NAME, currPrompt.doc_id);
                         const newPhoto = new Photo({
                             client: clientRef,
                             prompt: promptRef,
                             file: imageToUpload.file,
                             url: ''
-                        });
+                        } as IPhoto);
                         await newPhoto.save();
                         resolve(true);
                     } catch (error) {

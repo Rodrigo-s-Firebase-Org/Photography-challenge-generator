@@ -5,4 +5,5 @@ export interface IPhoto {
     prompt: DocumentReference | null;
     url: string;
     file: File | null;
+    doc_id: string;
 }

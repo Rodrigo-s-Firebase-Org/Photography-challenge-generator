@@ -28,6 +28,7 @@ export default class Photo implements IPhoto {
     prompt: DocumentReference | null;
     url: string;
     file: File | null;
+    doc_id: string;
 
     constructor(photo: IPhoto | null) {
         if (photo === null) throw new Error('No photo was provided');
@@ -37,6 +38,7 @@ export default class Photo implements IPhoto {
         this.prompt = photo.prompt;
         this.file = photo.file;
         this.url = '';
+        this.doc_id = '';
     }
 
     async save(): Promise<IPhoto | null> {

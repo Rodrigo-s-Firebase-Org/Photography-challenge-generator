@@ -11,13 +11,15 @@ import { IClient } from '../../../shared/client.interfaces';
 import Client from '../../../firebase/models/client.model';
 
 interface IPost {
-    prompt: IPrompt,
-    photos: IPhoto[],
+    photo: IPhoto,
     client: IClient | null
 }
 
 interface IPosts {
-    [promptId: string]: IPost
+    [promptId: string]: {
+        prompt: IPrompt,
+        posts: IPost[],
+    }
 }
 
 export default function PhotosHome() {
@@ -34,34 +36,40 @@ export default function PhotosHome() {
 
         const doFetch = async (): Promise<void> => {
             setIsLoading(true);
+            const buildingPosts: IPosts = {};
+
             const allPrompts = await Prompt.getAll();
 
             for (let i = 0; i < allPrompts.length; i++) {
-                const allPhotosFromPrompt = await Photo.getByPrompt(allPrompts[i].id);
-                let thisClient = null;
-                if (allPhotosFromPrompt.length > 0) {
-                    const possibleClient = allPhotosFromPrompt[0].client;
+                const allPhotosFromPrompt = await Photo.getByPrompt(allPrompts[i].doc_id);
+                const photosByThisPrompt: IPost[] = [];
+
+                for (let j = 0; j < allPhotosFromPrompt.length; j++) {
+                    // Each post
+                    let thisClient = null;
+                    const possibleClient = allPhotosFromPrompt[j].client;
                     if (possibleClient !== null) {
                         thisClient = await Client.getByDocId(possibleClient.id);
                     }
+    
+                    const newPost: IPost = {
+                        photo: allPhotosFromPrompt[j],
+                        client: thisClient
+                    };
+                    photosByThisPrompt.push(newPost);
                 }
 
-                const newPost: IPost = {
+                buildingPosts[allPrompts[i].doc_id] = {
                     prompt: allPrompts[i],
-                    photos: allPhotosFromPrompt,
-                    client: thisClient
-                };
-                setPosts(prev => {
-                    return {
-                        ...prev,
-                        [allPrompts[i].id]: newPost
-                    };
-                });
+                    posts: photosByThisPrompt
+                }
 
                 if (i === allPrompts.length - 1) {
                     setIsLoading(false);
                 }
             }
+
+            setPosts(buildingPosts);
         };
         void doFetch();
     };
@@ -77,30 +85,43 @@ export default function PhotosHome() {
                 </h1>
             )}
             {!isLoading && Object.keys(posts).map((promptId: string, index: number) => {
-                const currPrompt: IPrompt = posts[promptId].prompt;
-                const currPhotos: IPhoto[] = posts[promptId].photos;
-                const currClient: IClient | null = posts[promptId].client;
+                const currPromptInMap: IPrompt = posts[promptId].prompt;
+                const currPostsInMap: IPost[] = posts[promptId].posts;
+
                 return (
                     <div key={index} className={styles.layout_posts}>
                         <div className={styles.prompt}>
                             <span>
-                                "{currPrompt.challenge}"
+                                {currPromptInMap.challenge}
                             </span>
                         </div>
                         <div className={styles.container_cards}>
-                            {currPhotos.map((element: IPhoto, jIndex: number) => {
+                            {currPostsInMap.length === 0 && (
+                                <div>
+                                    {currPrompt !== null && (
+                                        <>
+                                            {currPrompt.day > currPromptInMap.day ?
+                                                "There weren't any photos :/" :
+                                                'There are still not photos... Be the first one :)' }  
+                                        </>
+                                    )}
+                                </div>
+                            )}
+                            {currPostsInMap.map((element: IPost, jIndex: number) => {
+                                const currPhoto: IPhoto = element.photo;
+                                const currClient: IClient | null = element.client;
+
                                 return (
                                     <div className={styles.card} key={jIndex}>
                                         <div className={styles.profile_user}>
                                             <img className={styles.profilePhoto} src={currClient?.profilePhoto} alt={currClient?.name} />
                                             {currClient?.name}
                                         </div>
-                                        <img src={element.url} alt={currPrompt.challenge} />
+                                        <img src={currPhoto.url} alt={currPromptInMap.challenge} />
                                     </div>
                                 )
                             })}
                         </div>
-
                     </div>
                 )
             })}

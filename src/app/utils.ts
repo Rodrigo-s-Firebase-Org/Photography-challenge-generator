@@ -3,7 +3,7 @@ import { DocumentData, QuerySnapshot, QueryDocumentSnapshot } from 'firebase/fir
 export function SnapshotFormater<T>(snapshot: QueryDocumentSnapshot<DocumentData, DocumentData>): T {  
   const obj = {
     ...snapshot.data(),
-    id: snapshot.id,
+    doc_id: snapshot.id,
   } as T;
   return obj;
 };
