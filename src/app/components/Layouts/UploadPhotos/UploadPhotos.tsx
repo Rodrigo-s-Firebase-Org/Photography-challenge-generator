@@ -138,7 +138,10 @@ export default function UploadPhotos() {
                 <div className={`${styles.container_for_upload} ${images.length === IMAGE_LIMIT && styles.reached_limit} ${canUploadMore() && styles.container_for_upload_resizing}`}  {...getRootProps()}>
                     <input {...getInputProps()} />
                     {images.length === 0 && (
-                        <img className={styles.upload_image} src='./icons/upload.svg' alt="Upload" />
+                        <>
+                            {/* eslint-disable-next-line */}
+                            <img className={styles.upload_image} src='./icons/upload.svg' alt="Upload" />
+                        </>
                     )}
                     {canUploadMore() && (
                         <SpinnerBtn btnType='slate'>

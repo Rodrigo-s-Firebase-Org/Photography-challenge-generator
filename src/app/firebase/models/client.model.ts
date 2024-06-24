@@ -19,6 +19,7 @@ export default class Client implements IClient {
   email: string;
   profilePhoto: string;
   name: string;
+  doc_id: string;
   id: string;
 
   constructor(client: IClient | null) {
@@ -27,6 +28,7 @@ export default class Client implements IClient {
     this.email = client.email;
     this.profilePhoto = client.profilePhoto;
     this.name = client.name;
+    this.doc_id = '';
     this.id = client.id;
   }
 

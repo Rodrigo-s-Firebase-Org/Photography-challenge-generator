@@ -73,6 +73,7 @@ export default class Photo implements IPhoto {
             const promptDocRef = doc(db, "prompts", promptId);
             const q = query(
                 collection(db, COLLECTION_NAME),
+                orderBy('createdAt', 'desc'),
                 where('prompt', '==', promptDocRef)
             );
             const docSnaps: IPhoto[] = CollectionFormater<IPhoto>(await getDocs(q));

@@ -74,12 +74,6 @@ export default function PhotosHome() {
         void doFetch();
     };
 
-    const sortPosts = (a: IPost, b: IPost): number => {
-        if (a.photo.createdAt > b.photo.createdAt) return -1;
-        if (a.photo.createdAt < b.photo.createdAt) return 1;
-        return 0;
-    }
-
     useEffect(getAllPhotos, []);
 
     return (
@@ -87,7 +81,7 @@ export default function PhotosHome() {
             {isLoading && <Loader />}
             {!isLoading && currPrompt !== null && (
                 <h1 className={styles.curr_prompt}>
-                    "{currPrompt.challenge}"
+                    {currPrompt.challenge}
                 </h1>
             )}
             {!isLoading && Object.keys(posts).map((promptId: string, index: number) => {
@@ -113,16 +107,18 @@ export default function PhotosHome() {
                                     )}
                                 </div>
                             )}
-                            {currPostsInMap.sort(sortPosts).map((element: IPost, jIndex: number) => {
+                            {currPostsInMap.map((element: IPost, jIndex: number) => {
                                 const currPhoto: IPhoto = element.photo;
                                 const currClient: IClient | null = element.client;
 
                                 return (
                                     <div className={styles.card} key={jIndex}>
                                         <div className={styles.profile_user}>
+                                            {/* eslint-disable-next-line */}
                                             <img className={styles.profilePhoto} src={currClient?.profilePhoto} alt={currClient?.name} />
                                             {currClient?.name}
                                         </div>
+                                        {/* eslint-disable-next-line */}
                                         <img src={currPhoto.url} alt={currPromptInMap.challenge} />
                                     </div>
                                 )

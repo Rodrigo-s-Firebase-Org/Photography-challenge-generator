@@ -22,5 +22,6 @@ export const usePrompts: IUsePrompts = () => {
         void doFetch();
     };
 
+    // eslint-disable-next-line
     useEffect(fetchPrompt, []);
 }

@@ -24,5 +24,6 @@ export const useRoutes: IUseRoutes = () => {
     useEffect(() => {
         if (isLoadingAuth) return;
         validateAuthInRoute();
+        // eslint-disable-next-line
     }, [client, isLoadingAuth]);
 }

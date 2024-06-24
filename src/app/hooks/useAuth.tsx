@@ -47,7 +47,8 @@ export const useAuth: IUseAuth = () => {
                 email: user.email,
                 name: user.displayName,
                 profilePhoto: user.photoURL || '',
-                id: user.uid
+                id: user.uid,
+                doc_id: ''
             }
             const newUser: Client = new Client(typedUser);
             await newUser.save();
@@ -79,6 +80,7 @@ export const useAuth: IUseAuth = () => {
             setClientIdCache(user.uid);
             fetchClient(user);
         });
+        // eslint-disable-next-line
     }, []);
 
     return {
