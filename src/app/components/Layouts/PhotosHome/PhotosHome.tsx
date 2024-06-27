@@ -139,6 +139,7 @@ export default function PhotosHome({
         void doFetch();
     }
 
+    // eslint-disable-next-line
     useEffect(getAllPhotos, []);
 
     return (
@@ -182,6 +183,7 @@ export default function PhotosHome({
                                         {isAskingDelete === cardId ? (
                                             <>
                                                 <div className={styles.card_rotated}>
+                                                    {/* eslint-disable-next-line */}
                                                     <img src="./assets/gopher.jpeg" alt="Are you sure?" />
                                                     <div className={styles.container_btns_rotated}>
                                                         <Button
@@ -199,7 +201,7 @@ export default function PhotosHome({
                                                             }}
                                                             isLoading={isLoadingDelete}
                                                         >
-                                                            I'm sure
+                                                            Im sure
                                                         </Button>
                                                     </div>
                                                 </div>
