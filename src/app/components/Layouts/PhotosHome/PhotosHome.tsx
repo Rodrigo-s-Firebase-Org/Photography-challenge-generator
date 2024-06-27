@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useContext } from 'react';
+import { useEffect, useRef, useState, useContext, Fragment } from 'react';
 import UploadButton from '../../Button/Upload/Upload';
 import { AuthContext } from '../../../context/Auth.context';
 import styles from './PhotosHome.module.css';
@@ -31,7 +31,8 @@ export default function PhotosHome({
     withEdit = false
 }: Props) {
     const {
-        currPrompt
+        currPrompt,
+        client
     } = useContext(AuthContext);
     const [posts, setPosts] = useState<IPosts>({});
     const isFetching = useRef(false);
@@ -60,11 +61,16 @@ export default function PhotosHome({
                         thisClient = await Client.getByDocId(possibleClient.id);
                     }
 
-                    const newPost: IPost = {
-                        photo: allPhotosFromPrompt[j],
-                        client: thisClient
-                    };
-                    photosByThisPrompt.push(newPost);
+                    if (
+                        withEdit &&
+                        client?.id === thisClient?.id
+                    ) {
+                        const newPost: IPost = {
+                            photo: allPhotosFromPrompt[j],
+                            client: thisClient
+                        };
+                        photosByThisPrompt.push(newPost);
+                    }
                 }
 
                 buildingPosts[allPrompts[i].doc_id] = {
@@ -81,6 +87,36 @@ export default function PhotosHome({
         };
         void doFetch();
     };
+
+    const deletePost = (
+        promptDayToDelete: number,
+        postPhotoId: string
+    ) => {
+        const newPosts: IPosts = {};
+
+        for (let i = 0; i < Object.keys(posts).length; i++) {
+            const currPostKeyInLoop = Object.keys(posts)[i];
+            const currPostsInLoop = posts[currPostKeyInLoop];
+            
+            if (currPostsInLoop.prompt.day !== promptDayToDelete) {
+                newPosts[currPostKeyInLoop] = currPostsInLoop;
+                continue;
+            }
+
+            // Delete photoId
+            const newArrayOfPosts: IPost[] = []
+
+            for (let j = 0; j < currPostsInLoop.posts.length; j++) {
+                const currPhotoInLoop: IPost = currPostsInLoop.posts[j];
+
+                if (currPhotoInLoop.photo.doc_id !== postPhotoId) {
+                    newArrayOfPosts.push(currPhotoInLoop);
+                }
+            }
+        }
+
+        setPosts(newPosts);
+    }
 
     useEffect(getAllPhotos, []);
 
@@ -137,6 +173,9 @@ export default function PhotosHome({
                                                         </Button>
                                                         <Button
                                                             btnType='indigo'
+                                                            action={() => {
+                                                                deletePost(currPromptInMap.day, currPhoto.doc_id);
+                                                            }}
                                                         >
                                                             I'm sure
                                                         </Button>
