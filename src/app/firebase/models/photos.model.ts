@@ -116,10 +116,18 @@ export default class Photo implements IPhoto {
         }
     }
 
-    static async delete(docId: string): Promise<boolean> {
+    static async delete(docId: string, fileUrl: string): Promise<boolean> {
         try {
-            const docRef = doc(db, COLLECTION_NAME, docId);
-            await deleteDoc(docRef);
+            const fileRef = storage.refFromURL(fileUrl); 
+
+            // Delete the file using the delete() method 
+            fileRef.delete().then(async function () { 
+                const docRef = doc(db, COLLECTION_NAME, docId);
+                await deleteDoc(docRef); 
+            }).catch(function (err) { 
+                console.log(err);
+                return false; 
+            });
         } catch (err) {
             console.log(err);
             return false;

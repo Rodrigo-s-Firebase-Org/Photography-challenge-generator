@@ -38,6 +38,7 @@ export default function PhotosHome({
     const isFetching = useRef(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isAskingDelete, setIsAskingDelete] = useState<string>('');
+    const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
 
     const getAllPhotos = (): void => {
         if (isFetching.current) return;
@@ -62,8 +63,10 @@ export default function PhotosHome({
                     }
 
                     if (
-                        withEdit &&
-                        client?.id === thisClient?.id
+                        (
+                            withEdit &&
+                            client?.id === thisClient?.id
+                        ) || !withEdit
                     ) {
                         const newPost: IPost = {
                             photo: allPhotosFromPrompt[j],
@@ -90,32 +93,50 @@ export default function PhotosHome({
 
     const deletePost = (
         promptDayToDelete: number,
-        postPhotoId: string
+        postPhotoId: string,
+        url: string
     ) => {
-        const newPosts: IPosts = {};
+        const doFetch = async (): Promise<void> => {
+            setIsLoadingDelete(true);
 
-        for (let i = 0; i < Object.keys(posts).length; i++) {
-            const currPostKeyInLoop = Object.keys(posts)[i];
-            const currPostsInLoop = posts[currPostKeyInLoop];
-            
-            if (currPostsInLoop.prompt.day !== promptDayToDelete) {
-                newPosts[currPostKeyInLoop] = currPostsInLoop;
-                continue;
-            }
+            await Photo.delete(postPhotoId, url);
 
-            // Delete photoId
-            const newArrayOfPosts: IPost[] = []
+            setIsLoadingDelete(false);
 
-            for (let j = 0; j < currPostsInLoop.posts.length; j++) {
-                const currPhotoInLoop: IPost = currPostsInLoop.posts[j];
+            // Update state
+            const newPosts: IPosts = {};
 
-                if (currPhotoInLoop.photo.doc_id !== postPhotoId) {
-                    newArrayOfPosts.push(currPhotoInLoop);
+            for (let i = 0; i < Object.keys(posts).length; i++) {
+                const currPostKeyInLoop = Object.keys(posts)[i];
+                const currPostsInLoop = posts[currPostKeyInLoop];
+                
+                if (currPostsInLoop.prompt.day !== promptDayToDelete) {
+                    newPosts[currPostKeyInLoop] = currPostsInLoop;
+                    continue;
                 }
-            }
-        }
+    
+                // Delete photoId
+                const newArrayOfPosts: IPost[] = []
+    
+                for (let j = 0; j < currPostsInLoop.posts.length; j++) {
+                    const currPhotoInLoop: IPost = currPostsInLoop.posts[j];
+    
+                    if (currPhotoInLoop.photo.doc_id !== postPhotoId) {
+                        newArrayOfPosts.push(currPhotoInLoop);
+                    }
+                }
 
-        setPosts(newPosts);
+
+                newPosts[currPostKeyInLoop] = {
+                    ...currPostsInLoop,
+                    posts: newArrayOfPosts
+                };
+            }
+    
+            setPosts(newPosts);
+
+        };
+        void doFetch();
     }
 
     useEffect(getAllPhotos, []);
@@ -174,8 +195,9 @@ export default function PhotosHome({
                                                         <Button
                                                             btnType='indigo'
                                                             action={() => {
-                                                                deletePost(currPromptInMap.day, currPhoto.doc_id);
+                                                                deletePost(currPromptInMap.day, currPhoto.doc_id, currPhoto.url);
                                                             }}
+                                                            isLoading={isLoadingDelete}
                                                         >
                                                             I'm sure
                                                         </Button>
