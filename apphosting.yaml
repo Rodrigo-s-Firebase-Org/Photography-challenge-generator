@@ -1,0 +1,13 @@
+env:
+  - variable: FIREB_API_KEY
+    secret: FIREBASE_API_KEY
+  - variable: FIREB_AUTH_DOMAIN
+    secret: FIREB_AUTH_DOMAIN
+  - variable: FIREB_PROJECT_ID
+    secret: FIREB_PROJECT_ID
+  - variable: FIREB_STORAGE_BUCKET
+    secret: FIREB_STORAGE_BUCKET
+  - variable: FIREB_MESSAGING_SENDER_ID
+    secret: FIREB_MESSAGING_SENDER_ID
+  - variable: FIREB_APP_ID
+    secret: FIREB_APP_ID
