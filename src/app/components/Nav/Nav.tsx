@@ -19,6 +19,7 @@ export default function Nav() {
           <>
             <AuthButton action='log-out' />
             <Link href='/profile'>
+              {/* eslint-disable-next-line */}
               <img className={styles.profilePhoto} src={client.profilePhoto} alt={client.name} />
             </Link>
           </>

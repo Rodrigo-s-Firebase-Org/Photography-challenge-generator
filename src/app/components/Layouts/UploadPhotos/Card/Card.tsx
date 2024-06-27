@@ -11,6 +11,7 @@ export default function Card({
 }: Props) {
     return (
         <div className={`${styles.card}`}>
+            {/* eslint-disable-next-line */}
             <img src={src} alt='Image to upload' />
             <button onClick={remove} className={styles.remove_btn}>x</button>
         </div>

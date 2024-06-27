@@ -3,4 +3,5 @@ export interface IClient {
     profilePhoto: string;
     name: string;
     id: string;
+    doc_id: string;
 }

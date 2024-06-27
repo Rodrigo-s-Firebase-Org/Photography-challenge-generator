@@ -6,7 +6,10 @@ import {
     updateDoc,
     deleteDoc,
     query,
-    where
+    where,
+    DocumentReference,
+    Timestamp,
+    orderBy
 } from 'firebase/firestore';
 import {
     getDownloadURL,
@@ -23,10 +26,12 @@ const COLLECTION_NAME = 'photos';
 const COLLECTION_REF = collection(db, COLLECTION_NAME);
 
 export default class Photo implements IPhoto {
-    client: string;
-    prompt: string;
+    client: DocumentReference | null;
+    prompt: DocumentReference | null;
     url: string;
     file: File | null;
+    doc_id: string;
+    createdAt: Date;
 
     constructor(photo: IPhoto | null) {
         if (photo === null) throw new Error('No photo was provided');
@@ -36,6 +41,8 @@ export default class Photo implements IPhoto {
         this.prompt = photo.prompt;
         this.file = photo.file;
         this.url = '';
+        this.doc_id = '';
+        this.createdAt = new Date();
     }
 
     async save(): Promise<IPhoto | null> {
@@ -50,6 +57,7 @@ export default class Photo implements IPhoto {
                 client: this.client,
                 prompt: this.prompt,
                 url: this.url,
+                createdAt: Timestamp.now().toDate().getTime()
             });
             document = await Photo.getById(addedDocRef.id);
         } catch (err) {
@@ -65,6 +73,7 @@ export default class Photo implements IPhoto {
             const promptDocRef = doc(db, "prompts", promptId);
             const q = query(
                 collection(db, COLLECTION_NAME),
+                orderBy('createdAt', 'desc'),
                 where('prompt', '==', promptDocRef)
             );
             const docSnaps: IPhoto[] = CollectionFormater<IPhoto>(await getDocs(q));
@@ -107,10 +116,18 @@ export default class Photo implements IPhoto {
         }
     }
 
-    static async delete(docId: string): Promise<boolean> {
+    static async delete(docId: string, fileUrl: string): Promise<boolean> {
         try {
-            const docRef = doc(db, COLLECTION_NAME, docId);
-            await deleteDoc(docRef);
+            const fileRef = storage.refFromURL(fileUrl); 
+
+            // Delete the file using the delete() method 
+            fileRef.delete().then(async function () { 
+                const docRef = doc(db, COLLECTION_NAME, docId);
+                await deleteDoc(docRef); 
+            }).catch(function (err) { 
+                console.log(err);
+                return false; 
+            });
         } catch (err) {
             console.log(err);
             return false;
